@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index"
+    
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.3",
+    "nodemon": "^3.1.7",
     "sequelize": "^6.37.5"
   }
 }

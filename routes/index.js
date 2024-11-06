@@ -21,7 +21,7 @@ const checkAuth = (req, res, next) => {
 router.get('/users', getUsers);
 
 // Route to register a new user
-router.post('/users', checkAuth, Register);
+router.post('/register', checkAuth, Register);
 
 // Route to log in a user
 router.post('/login', checkAuth, Login);

@@ -58,11 +58,25 @@ export const Login = async (req, res) => {
         const { email, password } = req.body;
         const user = await Users.findOne({ where: { email } });
 
-        if (!user) return res.status(400).json({ msg: 'User not found' });
+        if (!user) return res.status(400).json({ msg: 'Email is not registered' });
 
-        // Verify password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+        //Verify password
+        if (!email || !password) {
+            return res.status(400).json({ message: "Please provide both email and password" });
+        }
+        
+        try {
+            const user = await Users.findOne({ where: { email } });
+            const errorMsg = { message: 'Email or password is incorrect' };
+        
+            if (!user || !(await bcrypt.compare(password, user.password))) {
+                return res.status(400).json(errorMsg);
+            }
+        
+        } catch (error) {
+            res.status(500).json({ message: 'Server error' });
+        }
+         
 
         // Create access token and refresh token
         const accessToken = generateAccessToken(user);
@@ -87,7 +101,7 @@ export const Login = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
-        res.json({ accessToken, refreshToken }); // Optionally return tokens in response
+        res.json({ accessToken }); // Optionally return tokens in response
     } catch (error) {
         console.log(error);
         res.status(500).json({ msg: 'Internal server error' });
